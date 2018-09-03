@@ -1,0 +1,1 @@
+netstat -tunlp 查看当前用户占用的端口
