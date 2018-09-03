@@ -1,0 +1,1 @@
+find  / -name health-game 2>/dev/null  过滤无权限的查找
