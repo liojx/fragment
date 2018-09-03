@@ -1,0 +1,86 @@
+1. 安装
+	截至到我编辑的时间，git最新版本是Git-2.18.0 for 64 windows,可惜官网git-scm.com下载速度极慢，我就在太平洋网站下载了64 bit for windows的版本呢，安装包大概37M左右。
+	安装windows还是相当简单，一直点击next就搞定。安装完成后需要设置
+	git config --global user.name "Your Name"
+	git config --global user.email "email@example.com
+	否则会报错的。
+2. 创建库
+	我自己在本地创建了一个目录lsjrepository，完了右键鼠标，Git Bash Here 弹出命令框。完了，在命令行中 
+	git init 
+	即创建了.git的初始化版本库。
+3. 概念
+	工作区和暂存区
+	git status  查看状态
+	工作区：我们被管理，要操作的目录系统都属于工作区。
+	暂存区：stage。
+	我们把文件添加的库里面，需要两步：
+	1.通过git add 把文件添加到暂存区。
+	2.通过git commit 把暂存区的文件提交到当前分支里面。
+	管理修改
+	第一次修改 -> git add -> 第二次修改 -> git commit，我们发现只能提交第一次的修改。
+	Git管理的是修改，当你用git add命令后，在工作区的第一次修改被放入暂存区，准备提交，但是，在工作区的第二次修改并没有放入暂存区，所以，
+	git commit只负责把暂存区的修改提交了，也就是第一次的修改被提交了，第二次的修改不会被提交。
+	第一次修改 -> git add -> 第二次修改 -> git add -> git commit，这样才把第二次修改的提交。
+4. 版本回退
+	git log  可以查看最近的	历史纪录
+	git log --pretty=oneline 同上，只是简略信息
+	很长的用SHA1计算出来的十六机制ID，是标识版本好的commit id
+	git中HEAD 表示当前版本
+	HEAD^ 当前的上一个版本
+	HEAD^^ 当前的上上一个版本
+	
+	git reset --hard HEAD^ 表示回退到上一个版本
+	git reset --hard [commit id] 版本号可以不用写全，前几位就可以了，git 会自动去找，当然也不能只写前一两位，因为git可能找到多个版本，就无法确定是哪一个了。
+	git reflog 查看每一次的命令。
+5. 删除文件
+	git rm file ，删除文件，然后提交
+	git checkout -- file 撤销删除，和上面撤销修改一样，git checkout 其实是用版本库的版本替换工作区的版本，无论工作区的版本是删除或者更改，都可以还原。
+6. 远程仓库
+	由于你的本地Git仓库和GitHub仓库之间的传输是通过SSH加密的，所以需要创建密钥。
+
+	ssh-keygen -t rsa -C "liao_2464@163.com"    //创建SSH KEY
+	==>next
+	Enter file in which to save the key (/c/Users/Lsj/.ssh/id_rsa): ssh_key.txt
+	Enter passphrase (empty for no passphrase):lsj2464
+	Enter same passphrase again:lsj2464
+	这样就创建成功，注意你查看pwd得目录，这两个文件是保存在你当前操作目录下的。		
+	第一个输入的ssh_key.txt是私钥，第二个.pub是公钥，是可以放心告诉别人的。
+
+	==>next
+	登陆GitHub，打开Account settings,点击Add SSH KEY，填上任意Title,在key文本框里粘贴ssh_key.txt.pub文件的内容
+
+	==>next
+	本地库lsjRepository和github我创建的lsjRepository相关联
+	git remote add lsj git@github.com:liojx/lsjRepository.git
+	==>next
+	把本地库的分支 zlsj_test_branch1推到github里面去
+	 git push -u lsj zlsj_test_branch1
+	但是此时报错：确认有权利或者有库存在。
+	ssh -T git@github.com
+	测试权限,报错：git@github.com: Permission denied (publickey).
+	解决方式虽然很曲折，但最终成功了。
+	注意：错误1：输入密码必须是你的github账号的密码，我上面输入的lsj2464不是正确密码。
+	错误2：ssh_key.txt这是我自定义生成私钥的文本文件，不得行，必须明为：id_sha 无后缀
+	错误3：我生成密钥是成产在操作目录下的，必须拷贝到${用户}$/.ssh目录下。
+	错误4：github复制的是公钥，不是私钥。
+	最后用命令  git push -u lsj zlsj_test_branch1
+	需要输入你的登陆密码，终于成功了。
+	解析一下，lsj是上面用git remote add 的远程库名，zlsj_test_branch1是本地的当前分支
+7. 分支管理
+	分支管理
+	查看分支：git branch
+	创建分支：git branch <name>
+	切换分支：git checkout <name>
+	创建+切换分支：git checkout -b <name>
+	合并某分支到当前分支：git merge <name>
+	删除分支：git branch -d <name>
+8. 概念逻辑
+	origin:dev
+	这是库origin下的dev分支。
+	git push origin master
+	这里重点强调：origin 这个表示你要提交到远程的哪个库，origin其实就是一个库的标签，比如我本地clone的我自己的库，
+	我用git remote -v 查看我自己库关联的远程库是哪个：
+	origin  C:\Users\Lsj\git\ordinary_tst\.git (fetch)
+	origin  C:\Users\Lsj\git\ordinary_tst\.git (push)
+	master 是哪个远程库下面的哪个分支。	master 其实是一个refspec ,正常的refspec 是<src>:<dst>,冒号前是local branch 的名字，冒号后面是remote branch的名字，
+	如果省略了dst,git 就认为你想push到remote repository下和local branch相同名字的branch，上面那句就等价于git push origin master:master
