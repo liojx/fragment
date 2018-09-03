@@ -84,3 +84,5 @@
 	origin  C:\Users\Lsj\git\ordinary_tst\.git (push)
 	master 是哪个远程库下面的哪个分支。	master 其实是一个refspec ,正常的refspec 是<src>:<dst>,冒号前是local branch 的名字，冒号后面是remote branch的名字，
 	如果省略了dst,git 就认为你想push到remote repository下和local branch相同名字的branch，上面那句就等价于git push origin master:master
+9. github拷贝
+	上面第6点是从本地和github建立关联，而我这里要说的是再github建立库，然后从github克隆下来。两个不一样的，前者需输入密码，后者需要输我的github的用户名和密码
