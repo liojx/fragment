@@ -1,0 +1,22 @@
+1.Unable to load annotation processor factory 'M2_REPO/org/springframework/boot/spring-boot-starter-amqp/1.5.1.RELEASE/
+spring-boot-starter-amqp-1.5.1.RELEASE.jar' for project healthstation-macserver
+该错误是同事直接从他本地复制给我的，出现类似的有4个包。网上百度只有一个与该问题相关的，说的是项目右键到Java Compiler-Annaotation Processing-Factory
+Path 去更改对应包的路径为正确路径，但是，我去该Factory Path下去找报错的包，根本都没有啊。而继续百度，完全没有相关解决的例子。百思不解中，
+我发现之前web项目改过.classpath文件，我便到项目本身物理路径下去找，发现有个.factoryPath文件，我搜索相应的包名，果然在里面有，然后标签中有这样属性：
+enabled="true"，我把这四个包相关标签的该属性都改成false,立马就正确了。我想，如果删掉4个相关的标签也会正确。可见，经验多重要啊。
+分析：我想是之前同事把这4个jar包的引用删除，而引用路径残留导致问题产生的吧。
+
+2.工程图标上无J图标
+在工程的.project的<natures>目录下增加<nature>org.eclipse.jdt.core.javanature</nature>便可以把这个项目变成Java项目，然后J图标出现。
+
+3.Push rejected: Push dev to origin/dev was rejected by remote
+Git首次提交时出的错误。首先我的git大概这样的。本地创建了一个git仓库，放在了A目录，完了用A 目录远程关联了github的origin。其次，通过Idea把A库clone
+到B目录下，B做的更改，push的时候就报错。
+假想1:以为A关联了gitHub就不能再关联其他了。错误❌
+假想2：以为B和A根本没有关联起来。按照网上说的最多的处理方式，就是在B库的位置git bash here ,然后敲入git pull origin master 
+--allow-unrelated-histories。结果也不行。
+终极解决方式：仍然在B库位置，git bash here ,然后在这里git push ,发现有个错误提示：receive.denyCurrentBranch' configuration 
+variable to 'refuse'，意思是“当前分支接受选项是否拒绝” 配置成了拒绝。然后再用这个关键字搜索，得到一个命令：
+git config receive.denyCurrentBranch ignore
+就是设置上面这个参数为“忽略”。
+果然成功了。
