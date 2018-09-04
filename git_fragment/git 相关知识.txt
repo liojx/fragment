@@ -110,3 +110,9 @@
 	所以这里就用eclipse 对应一下:
 	working tree 改变的文件集  <====> eclipse 放在 Unstaged Changes
 	Index 的文件集             <====> eclipse 放在 Staged Changes 
+12.更改邮箱和用户名
+	我今天查看git log时，发现我的代码提交用户名是liaodaye ,邮箱是liao_2464@163.com,是我个人邮箱和我个人昵称，尴尬。这里讲一下更改邮箱和用户	     名。
+	可以直接用命令改：
+	git config --global user.name liaosijun
+	git config --global user.email liaosijun@doctorwork.com
+	也可以在当前项目下，git bash here ,到 ~/.gitconfig 里面去更改。
