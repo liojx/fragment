@@ -92,3 +92,5 @@
 9. github拷贝
 	上面第6点是从本地和github建立关联，而我这里要说的是再github建立库，然后从github克隆下来。两个不一样的，前者需输入密码，
 	后者需要输我的github的用户名和密码
+10.upstream 和 downstream
+	意思是本地库A的分支dev push到远程库B的分支devRemote,此时B的devRemote就是A的upsream,而A的dev就是B的devRemote的downstream，他们是相对的。
