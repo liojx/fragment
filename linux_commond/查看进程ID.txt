@@ -3,12 +3,12 @@ LinuxÔÚÆô¶¯Ò»¸ö½ø³ÌÊ±£¬ÏµÍ³»áÔÚ/procÏÂ´´½¨Ò»¸öÒÔPIDÃüÃûµÄÎÄ¼þ¼Ð£¬ÔÚ¸ÃÎÄ¼þ¼ÐÏÂ»áÓ
 
 ll /proc/PID
 
-cwd·ûºÅÁ´½ÓµÄÊÇ½ø³ÌÔËÐÐÄ¿Â¼£»
+cwd·ûºÅÁ´½ÓµÄÊÇ½ø³ÌÔËÐÐÄ¿Â¼£¬
 
-exe·ûºÅÁ¬½Ó¾ÍÊÇÖ´ÐÐ³ÌÐòµÄ¾ø¶ÔÂ·¾¶£»
+exe·ûºÅÁ¬½Ó¾ÍÊÇÖ´ÐÐ³ÌÐòµÄ¾ø¶ÔÂ·¾¶£¬
 
-cmdline¾ÍÊÇ³ÌÐòÔËÐÐÊ±ÊäÈëµÄÃüÁîÐÐÃüÁî£»
+cmdline¾ÍÊÇ³ÌÐòÔËÐÐÊ±ÊäÈëµÄÃüÁîÐÐÃüÁî£¬
 
-environ¼ÇÂ¼ÁË½ø³ÌÔËÐÐÊ±µÄ»·¾³±äÁ¿£»
+environ¼ÇÂ¼ÁË½ø³ÌÔËÐÐÊ±µÄ»·¾³±äÁ¿£¬
 
 fdÄ¿Â¼ÏÂÊÇ½ø³Ì´ò¿ª»òÊ¹ÓÃµÄÎÄ¼þµÄ·ûºÅÁ¬½Ó¡£
