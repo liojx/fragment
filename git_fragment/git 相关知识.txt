@@ -94,3 +94,19 @@
 	后者需要输我的github的用户名和密码
 10.upstream 和 downstream
 	意思是本地库A的分支dev push到远程库B的分支devRemote,此时B的devRemote就是A的upsream,而A的dev就是B的devRemote的downstream，他们是相对的。
+11.reset
+	当我reset 的时候懵逼了，eclipse会让我选择reset type(Soft[HEAD updated],Mixed[HEAD and index updated],Hard[HEAD,index and working 	tree updated]).
+	类型一：软，只重置HEAD
+	类型二：混合，重置HEAD 和 index
+	类型三: 硬，重置 HEAD 、index  和working tree
+	现在需要解释一下这三个概念了：
+	HEAD：这是我当前分支最顶端的别名，也就是指向我最近一次提交的。
+	Index: 这个被称为staging area, 它对应的是eclipse的Staged Changes ,也就是即将要提交的一个文件集。也就是git add 进来的缓存区，我通过
+	 bash here 用git add .然后到eclipse  里右侧的Git Staging 点击刷新按钮，就可以看到git add . 操作生效，文件由Unstaged Changes 跑到
+	 Staged Changes里面去了。
+	working tree:这个就是我的工作空间，说白了就是本地文件集合，比如我更改后按ctrl+s ，这时eclipse 的Unstaged Changes 就有文件列表。所以，
+	如果把working tree 重置的话，就相当于把你本地的更改也重置了。
+	
+	所以这里就用eclipse 对应一下:
+	working tree 改变的文件集  <====> eclipse 放在 Unstaged Changes
+	Index 的文件集             <====> eclipse 放在 Staged Changes 
