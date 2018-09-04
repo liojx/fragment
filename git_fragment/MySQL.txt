@@ -1,0 +1,4 @@
+创建用户
+语句格式：CREATE USER 'username'@'host' IDENTIFIED BY 'password';
+我创建：CREATE USER 'lsj@127.0.0.1' IDENTIFIED BY "liaosijun";
+授权：grant all privileges on *.* to lsj@127.0.0.1 identified by 'liaosijun';
