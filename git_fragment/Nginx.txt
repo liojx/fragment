@@ -1,0 +1,103 @@
+nginx.conf
+#全局块
+#load_module '/usr/local/nginx/modules/ngx_http_headers_more_filter_module.so';
+user  www www;
+worker_processes auto;
+error_log  /var/log/nginx/nginx_error.log  crit;
+#pid        /o/nginx/nginx.pid;
+
+#Specifies the value for maximum file descriptors that can be opened by this process.
+worker_rlimit_nofile 65535;
+#events块
+events
+{
+    use epoll;
+    worker_connections 65535;
+}
+#http块
+http
+{
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    charset  UTF-8;
+
+    log_format  main  '"$remote_addr" "$remote_user" "$time_local" "$host"  "$request" "$request_body" '
+                      '"$status" "$body_bytes_sent" "$request_time" "$upstream_response_time" "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log /var/log/nginx/nginx_access.log main;
+
+    server_names_hash_bucket_size 128;
+    client_header_buffer_size 32k;
+    large_client_header_buffers 4 32k;
+    client_max_body_size 8m;
+
+    sendfile on;
+    server_tokens off;
+    tcp_nopush     on;
+
+    keepalive_timeout 60;
+
+    tcp_nodelay on;
+
+    fastcgi_connect_timeout 3000;
+    fastcgi_send_timeout 3000;
+    fastcgi_read_timeout 3000;
+    fastcgi_buffer_size 256k;
+    fastcgi_buffers 4 256k;
+    fastcgi_busy_buffers_size 512k;
+    fastcgi_temp_file_write_size 512k;
+
+    resolver 114.114.114.114;
+
+    gzip on;
+    gzip_min_length  1k;
+    gzip_buffers     4 16k;
+    gzip_http_version 1.0;
+    gzip_comp_level 2;
+    gzip_types       text/plain application/x-javascript text/css application/xml application/javascript application/json;
+    gzip_vary on;
+
+    #limit_zone  crawler  $binary_remote_addr  10m;
+
+
+#      autoindex on;
+#      autoindex_exact_size on;
+#      autoindex_localtime on;
+
+
+
+
+include vhost/*.conf;
+access_log /var/log/nginx/nginx_access.log;
+}
+1、全局块：配置影响nginx全局的指令。一般有运行nginx服务器的用户组，nginx进程pid存放路径，日志存放路径，配置文件引入，允许生成worker process数等。
+2、events块：配置影响nginx服务器或与用户的网络连接。有每个进程的最大连接数，选取哪种事件驱动模型处理连接请求，是否允许同时接受多个网路连接，
+开启多个网络连接序列化等。
+3、http块：可以嵌套多个server，配置代理，缓存，日志定义等绝大多数功能和第三方模块的配置。如文件引入，mime-type定义，日志自定义，
+是否使用sendfile传输文件，连接超时时间，单连接请求数等。
+4、server块：配置虚拟主机的相关参数，一个http中可以有多个server。
+5、location块：配置请求的路由，以及各种页面的处理情况。
+
+epoll的优点
+1.cat /proc/sys/fs/file-max
+支持一个进程打开最大数目的socket描述符（FD）,本台电脑为797699个。
+Select/poll支持最大默认值是2048.
+2.IO效率不随FD数目增加而线性下降
+传统的select/poll另一个致命弱点就是当你拥有一个很大的socket集合，不过由于网络延时，任一时间只有部分的socket是”活跃”的，但是select/poll每次调
+用都会线性扫描全部的集合，导致效率呈现线性下降。但是epoll不存在这个问题，它只会对”活跃”的socket进行操 作—这是因为在内核实现中epoll是根据
+每个fd上面的callback函数实现的。那么，只有”活跃”的socket才会主动的去调用 callback函数，其他idle状态socket则不会，在这点上，epoll
+实现了一个”伪”AIO，因为这时候推动力在os内核。在一些 benchmark中，如果所有的socket基本上都是活跃的—比如一个高速LAN环境，epoll并不比
+select/poll有什么效率，相 反，如果过多使用epoll_ctl,效率相比还有稍微的下降。但是一旦使用idle connections模拟WAN环境,epoll的效率就远
+在select/poll之上了。
+
+3.使用mmap加速内核与用户空间的消息传递。
+这 点实际上涉及到epoll的具体实现了。无论是select,poll还是epoll都需要内核把FD消息通知给用户空间，如何避免不必要的内存拷贝就很 重要，在这点上，
+epoll是通过内核于用户空间mmap同一块内存实现的。而如果你想我一样从2.5内核就关注epoll的话，一定不会忘记手工 mmap这一步的。
+
+4.内核微调
+这一点其实不算epoll的优点了，而是整个linux平台的优点。也许你可以怀疑linux平台，但是你无法回避linux平台赋予你微调内核的能力。比如，内核TCP/IP协 
+议栈使用内存池管理sk_buff结构，那么可以在运行时期动态调整这个内存pool(skb_head_pool)的大小— 通过echo XXXX>/proc/sys/net/core/hot_list_length
+完成。再比如listen函数的第2个参数(TCP完成3次握手 的数据包队列长度)，也可以根据你平台内存大小动态调整。更甚至在一个数据包面数目巨大但同时每个数据
+包本身大小却很小的特殊系统上尝试最新的NAPI网卡驱动架构。
