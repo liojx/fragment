@@ -1,0 +1,30 @@
+File->Synchronize
+Detect all externally changed files and reload them from disk.
+检查所有外部变更文件并从磁盘中加载,但是这个过程本来就是自动的。比如我通过notepad修改一个本地文件，更新会立即显示在Idea.
+File->Invalidate Caches / Restart
+此操作会失去之前的本地工程级别的所有配置，谨慎操作,就是清理缓存和索引的入口，表示“ 无效缓存或者重新启动
+Edit->Copy path
+复制的是当前打开文件的绝对路径
+
+Edit->Copy Reference
+不懂，打开类名，不动鼠标，复制的是类的全路径，动鼠标又复制的是带行的类的路径。
+Edit->Find
+Find (ctrl+f) :查找当前文件的关键字
+Replace(ctrl+r):找到并替换 Replace 一个一个替换，Replace All 全部替换，include 包含在替换范围内，exclude不包含在替换范围内
+F3:找到，再按就是下一个
+Shift+f3 :和F3一样，但查找顺序相反
+Ctrl+shift+alt+J:选中所有查到的关键字
+
+Edit->Column Selection Mode
+Alt+shift+Insert :可以以列的方式选中
+Edit->Extend Selection
+Ctrl+w : 继承选中，比较有用
+Edit->complete current statement
+Ctrl+shift+enter :当前语句自动补全，好像只能补全大括号？
+Edit->Underline or selection
+Shift+tab：就是选中行被反tab
+Navigate->Custom Folding
+Ctrl + alt + 句号： 代码折叠
+不要勾选Use tab character 
+默认设置Indent为4个空格，勾选就不知道一个tab按键代表几个空格了。路径在
+Editor-->Code Style --> java，不要勾选Use tab character -->Indent设置为4
