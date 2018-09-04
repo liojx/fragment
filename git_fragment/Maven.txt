@@ -1,0 +1,71 @@
+1. 中央仓库位置
+%MAVEN_HOME%/lib/maven-model-builder-3.2.1.jar里面，我的是
+C:\Program Files\apache-maven-3.5.3\lib\maven-model-builder-3.5.3.jar
+打开里面的 org/apache/maven/model/pom-4.0.0.xml 超级POM，看到
+<repository>
+      <id>central</id>
+      <name>Central Repository</name>
+      <url>https://repo.maven.apache.org/maven2</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+即https://repo.maven.apache.org/maven2是中央仓库
+2. 本地仓库位置
+ %MAVEN_HOME%/conf/settings.xml里面的<localRepository>C:\\mavenRep</localRepository>即本地仓库
+3. 标签解释
+modelVersion
+  声明项目描述符遵循哪一个POM模型版本。模型本身的版本很少改变，虽然如此，但它仍然是必不可少的，这是为了当Maven引入了新的特性或者其他模型变更的时候，
+  确保稳定性。
+Properties
+  项目开发者属性，如即时消息如何处理等
+project.build.sourceEncoding
+  项目统一编码格式
+spring.version
+  项目统一spring版本
+Profile
+  profile可以看作是pom的一部分. 简单来说, profile支持定义一系列的配置信息, 然后在不同的环境中, 可以自动触发不同的配置. 比如, 在windows下是
+  一套配置, 在linux下是另一套配置.可以选择在多个地方定义 profile. 在不同地方定义, 作用范围不同. 针对某个项目的配置, 可以写在 pom.xml中. 
+  针对某个用户的配置, 可以在用户目录下的 .m2目录下的 setting.xml 文件中定义. 针对全局的配置, 可以在maven安装目录下的 conf目录中的 setting.xml 
+  文件中定义.profile中能定义的配置信息与所处位置相关. 如果是在settings.xml中, 是全局意义的, 只能定义一些相对而言作用范围较广的配置,
+  比如<repositories>, <pluginRepositories>, <properties>.  定义在<properties>中的键值对可以在pom.xml中使用.
+  如果是在pom.xml中, 可以根据项目的不同来定义不同的细节配置信息. 主要有: <repositories>, <pluginRepositories>, <dependencies>, <plugins>, 
+  <properties>, <dependencyManagement>, <distributionManagement>, <build>下的子元素.
+  profile有多种不同的激活方式. 1) 在profile的<activation>下, 将<activeByDefault>元素的值设为true, 就表示没有指定其他profile为激活状态时, 
+  默认激活该profile.   2) 在settings.xml中使用<activeProfiles>指定自动激活的profile名. 这样的profile在所有情况下都处于激活状态. 3) 显式命令
+  使用-p选项,指定profile.  4) 根据不同的环境来激活, 如jdk版本, 操作系统, 系统属性, 5) 根据文件是否存在来激活.
+  可以使用 mvn help: active-Profiles来查看处于激活状态的profiles.
+logback配置
+  logback的配置，需要配置输出源appender，打日志的loger（子节点）和root（根节点），实际上，它输出日志是从子节点开始，子节点如果有输出源直接输入
+  ，如果无，判断配置的addtivity，是否像上级传递，即是否向root传递，传递则采用root的输出源，否则不输出日志。
+  级别由低到高：级别包括：TRACE、DEBUG、INFO、WARN和ERROR
+  定义INFO,就打印大于INFO并包含INFO的日志信息
+
+Logback主要建立于Logger、Appender 和 Layout 这三个类之上
+Logger:日志的记录器，把它关联到应用的对应的context上后，主要用于存放日志对象，也可以定义日志类型、级别。Logger对象一般多定义为静态常量
+Appender:用于指定日志输出的目的地，目的地可以是控制台、文件、远程套接字服务器、 MySQL、 PostreSQL、Oracle和其他数据库、 JMS和远程UNIX Syslog
+守护进程等
+Layout:负责把事件转换成字符串，格式化的日志信息的输出
+
+t/thread	产生logging event 的线程名 
+
+p / le / level	日志的level 
+m / msg / message	logging event 的 message
+n	输出与系统平台相关的换行符。例如linux 的"\n", 或者 windows"\r\n"
+L / line	caller data 行号，速度慢，不推荐
+logger 的名称
+可接收一个可选参数，设置logger name的长度。默认输出全名，参数0代表只输出Logger name最右边点号的值，如只输出类名，不输出包名。
+注意：点号最右边的字符串不会被压缩，如果length的值小于Logger name，其他字符串最小也只能被压缩成1个字符，但不会缺失。
+
+Conversion specifier	     Logger name	                          Result
+%logger	             mainPackage.sub.sample.Bar	          mainPackage.sub.sample.Bar
+%logger{0}	         mainPackage.sub.sample.Bar	          Bar
+%logger{5}	         mainPackage.sub.sample.Bar	          m.s.s.Bar
+%logger{10}	         mainPackage.sub.sample.Bar	          m.s.s.Bar
+%logger{15}	         mainPackage.sub.sample.Bar	          m.s.sample.Bar
+%logger{16}	         mainPackage.sub.sample.Bar	          m.sub.sample.Bar
+%logger{26}	         mainPackage.sub.sample.Bar	          mainPackage.sub.sample.Bar
+
+4.mvn clean compile -U -X
+到当前目录进行编译
