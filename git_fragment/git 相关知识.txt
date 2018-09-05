@@ -43,7 +43,7 @@
 
 	ssh-keygen -t rsa -C "liao_2464@163.com"    //创建SSH KEY
 	==>next
-	Enter file in which to save the key (/c/Users/Lsj/.ssh/id_rsa): ssh_key.txt
+	Enter file in which to save the key (/c/Users/Lsj/.ssh/id_rsa): ssh_key.txt 更改为id_sha
 	Enter passphrase (empty for no passphrase):lsj2464
 	Enter same passphrase again:lsj2464
 	这样就创建成功，注意你查看pwd得目录，这两个文件是保存在你当前操作目录下的。		
