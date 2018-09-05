@@ -43,7 +43,7 @@
 
 	ssh-keygen -t rsa -C "liao_2464@163.com"    //创建SSH KEY
 	==>next
-	Enter file in which to save the key (/c/Users/Lsj/.ssh/id_rsa): ssh_key.txt 更改为id_sha
+	Enter file in which to save the key (/c/Users/Lsj/.ssh/id_rsa): ssh_key.txt 更改为id_rsa
 	Enter passphrase (empty for no passphrase):lsj2464
 	Enter same passphrase again:lsj2464
 	这样就创建成功，注意你查看pwd得目录，这两个文件是保存在你当前操作目录下的。		
@@ -63,7 +63,7 @@
 	测试权限,报错：git@github.com: Permission denied (publickey).
 	解决方式虽然很曲折，但最终成功了。
 	注意：错误1：输入密码必须是你的github账号的密码，我上面输入的lsj2464不是正确密码。
-	错误2：ssh_key.txt这是我自定义生成私钥的文本文件，不得行，必须明为：id_sha 无后缀
+	错误2：ssh_key.txt这是我自定义生成私钥的文本文件，不得行，必须明为：id_rsa 无后缀
 	错误3：我生成密钥是成产在操作目录下的，必须拷贝到${用户}$/.ssh目录下。
 	错误4：github复制的是公钥，不是私钥。
 	最后用命令  git push -u lsj zlsj_test_branch1
