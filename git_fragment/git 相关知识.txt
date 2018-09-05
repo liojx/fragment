@@ -116,3 +116,24 @@
 	git config --global user.name liaosijun
 	git config --global user.email liaosijun@doctorwork.com
 	也可以在当前项目下，git bash here ,到 ~/.gitconfig 里面去更改。
+13.库提交，前提是已经配置了私钥
+	a.本地创建一个maven 工程zhehan
+	b.它的目录下 git bash here 然后，git init 生成.git 文件，也就创建了一个本地库，然后git add . 增加，git commit -m 'init' 提交
+	c.github也创建一个zhahan.git的库，然后添加一个read.me文件
+	d.本地git remote add origin  git@github.com:liojx/zhehan.git 创建关联，此时会在本地.git的config 文件里增加三行
+		[remote "origin"]
+		url = git@github.com:liojx/zhehan.git
+		fetch = +refs/heads/*:refs/remotes/origin/*
+	e.提交  git push --set-upstream origin master 这里提交，同时设置github的分支是本地分支的上游，origin 是远程库，master是本地分支，向
+	远程库推送本地分支，此时报错
+		fatal: 'git@github.com/liojx/zhehan.git' does not appear to be a git repository
+		fatal: Could not read from remote repository.
+
+		Please make sure you have the correct access rights
+		and the repository exists.
+	解决方式是  git remote set-url origin git@github.com:liojx/zhehan.git 然后就可以git pull 但是两个不相干的库拉取需要
+		git pull origin master --allow-unrelated-histories
+	push的时候也要设置上游
+		git push --set-upstream origin master
+	注意：这里的url  git@github.com: .com 后面是【冒号】不是【斜杠】，虽然git remote add可以斜杠和冒号不分，但是git remote set-url是
+	必须冒号的。
