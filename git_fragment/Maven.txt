@@ -69,3 +69,8 @@ Conversion specifier	     Logger name	                          Result
 
 4.mvn clean compile -U -X
 到当前目录进行编译
+5.命令
+      a. 编译： mvn compile 
+      b. 打包： mvn package
+      c. 清理 编译 测试 打包： mvn install  
+            该命令会在apache-maven-3.5.3/conf/setting.xml 中localRepository 标签配置得目录下生成安装相应的包。
