@@ -1,0 +1,63 @@
+1. Integer 的MIN_VALUE = 0x80000000; Integer 的MAX_VALUE = 0xfffffff;
+2.  JDK5 以后规定了一个常量SIZE = 32,说明Integer 占 32位，JDK8以后增加了 BYTES = SIZE /Byte.SIZE ，这是取Integer占得字节长度
+3. Integer 的toString(int i, int radix) 是把传入的int数转换成radix进制,然后按String的形式输出来。
+  如果radix是超过基数的范围 2~36 那么就按10进制处理
+  为什么最大是36？ 因为只有0~9 + a~z 所以，最多表示36进制。
+  如果radix 传入的是10, 那么直接调用toString(int i)一个参数的方法
+     public static String toString(int i) {
+        if (i == Integer.MIN_VALUE)  //如果是最小，直接返回最小值，有必要吗？
+            return "-2147483648";
+        // sizeTable 表示几位数
+        int size = (i < 0) ? stringSize(-i) + 1 : stringSize(i);
+        char[] buf = new char[size];
+        getChars(i, size, buf);
+        return new String(buf, true);
+    }
+  
+  static void getChars(int i, int index, char[] buf) {
+        int q, r;
+        int charPos = index; // 长度
+        char sign = 0;
+        
+        // 如果是负数，求反，负负得正
+        if (i < 0) {
+            sign = '-';
+            i = -i;
+        }
+
+        // Generate two digits per iteration
+        while (i >= 65536) {
+            // 对100求商取整
+            q = i / 100;
+            // really: r = i - (q * 100);
+            // 不知道为什么要用位移的方式，我用10亿次的循环检验 其实位移的效率没有 q*100 高
+            // i /100 除不尽的余数
+            r = i - ((q << 6) + (q << 5) + (q << 2));
+            i = q;
+            buf [--charPos] = DigitOnes[r];
+            buf [--charPos] = DigitTens[r];
+        }
+
+        // Fall thru to fast mode for smaller numbers
+        // assert(i <= 65536, i);
+        for (;;) { // wile(true)
+            q = (i * 52429) >>> (16+3);
+            r = i - ((q << 3) + (q << 1));  // r = i-(q*10) ...
+            buf [--charPos] = digits [r];
+            i = q;
+            if (i == 0) break;
+        }
+        if (sign != 0) {
+            buf [--charPos] = sign;
+        }
+    }
+    
+  final static int [] sizeTable = { 9, 99, 999, 9999, 99999, 999999, 9999999,
+                                      99999999, 999999999, Integer.MAX_VALUE };
+
+    // Requires positive x
+    static int stringSize(int x) {
+        for (int i=0; ; i++)
+            if (x <= sizeTable[i])
+                return i+1;
+    }
