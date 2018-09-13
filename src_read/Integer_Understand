@@ -6,6 +6,9 @@
   如果radix 传入的是10, 那么直接调用toString(int i)一个参数的方法
      public static String toString(int i) {
         if (i == Integer.MIN_VALUE)  //如果是最小，直接返回最小值，有必要吗？
+                                      // 后面看懂了，下面size是取多少位的，例如2000，那么2000大于sizeTable的999，小于9999，得出2000为
+                                      // 4位数，如果stringSize(-i) + 1,如果是负数，就+1位，因为有-号，如果是最小值-2147483648，它要转换
+                                      // 成正数，就是2147483648，刚好溢出，int 最大值是2147483647，所以这里最小值直接返回。
             return "-2147483648";
         // sizeTable 表示几位数
         int size = (i < 0) ? stringSize(-i) + 1 : stringSize(i);
@@ -14,9 +17,10 @@
         return new String(buf, true);
     }
   
+  // 根据数字i 和数字的位数index 来操作 char数组
   static void getChars(int i, int index, char[] buf) {
         int q, r;
-        int charPos = index; // 长度
+        int charPos = index; // 位数长度
         char sign = 0;
         
         // 如果是负数，求反，负负得正
@@ -26,21 +30,30 @@
         }
 
         // Generate two digits per iteration
+        // 这里实在没看懂为什么用65536 作为分界线 2 ^ 16 次方 ，因为int 占4字节吗？
+        // 大于这个数按照100来除
         while (i >= 65536) {
             // 对100求商取整
             q = i / 100;
             // really: r = i - (q * 100);
-            // 不知道为什么要用位移的方式，我用10亿次的循环检验 其实位移的效率没有 q*100 高
+            // 不知道为什么要用位移的方式，我用10亿次的循环检验 其实位移的效率没有 q*100 高? 
+            // 也可能是操作系统层面直接做了字节码操作，* 和 位移 等价了？ 不深究了。
+            // i - ((q << 6) + (q << 5) + (q << 2))   等价于 i - q * ( 2^6 + 2^5 + 2^2)
+            
             // i /100 除不尽的余数
             r = i - ((q << 6) + (q << 5) + (q << 2));
             i = q;
+            // DigitOnes 是按照对%10取模后的余数
             buf [--charPos] = DigitOnes[r];
+            // DigitTens 是按照对/10取余 
             buf [--charPos] = DigitTens[r];
         }
 
         // Fall thru to fast mode for smaller numbers
         // assert(i <= 65536, i);
         for (;;) { // wile(true)
+          // 上面大于65536 是对100求商，下面这个是对10求商， 也就是 q = i / 10 为毛不直接写成 i /10 ,这又是为了效率
+          //
             q = (i * 52429) >>> (16+3);
             r = i - ((q << 3) + (q << 1));  // r = i-(q*10) ...
             buf [--charPos] = digits [r];
