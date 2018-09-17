@@ -137,3 +137,8 @@
 		git push --set-upstream origin master
 	注意：这里的url  git@github.com: .com 后面是【冒号】不是【斜杠】，虽然git remote add可以斜杠和冒号不分，但是git remote set-url是
 	必须冒号的。
+14.从github拉取
+	a.本地创建目录CQGas,然后git bash here ,git init
+	b. git remote add origin git@github.com:liojx/CQGas.git
+	c.git pull origin master --allow-unrelated-histories
+
