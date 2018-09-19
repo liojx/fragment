@@ -49,4 +49,53 @@
         }
         @Configuration 类里面的@Bean方法
         通常，@Bean是在@Configuration类中声明的。在这种情况下，bean方法在本类中直接引用其它的@Bean方法。这样就保证beans之间的引用是健壮的类型和可
-        操作性的。因此这些被叫做“内部bean引用”保证了切面范围和AOP含义，就像getBean()去查找。这些是最初的“Spring JavaConfig”项目中已知的语义，该项         目需要在运行时对每个配置类进行CGLIB子类化。因此，作为一个结果， @Configuration类和它的工厂方法不能够标记为final和private.例如：
+        操作性的。因此这些被叫做“内部bean引用”保证了切面范围和AOP含义，就像getBean()去查找。这些是最初的“Spring JavaConfig”项目中已知的语义，
+        该项目需要在运行时对每个配置类进行CGLIB子类化。因此，作为一个结果， @Configuration类和它的工厂方法不能够标记为final和private.例如：
+        @Configuration
+        public class AppConfig {
+
+            &#064;Bean
+            public FooService fooService() {
+                return new FooService(fooRepository());
+            }
+
+            &#064;Bean
+            public FooRepository fooRepository() {
+                return new JdbcFooRepository(dataSource());
+            }
+
+            // ...
+        }
+        @Bean 的Lite模式
+       @Bean方法也有可能声明在没有注解@Configuration的类里面，比如说，@Bean方法可能声明在@Component类里面或者在一个普通的类里面。这种情况，
+       @Bean方法将被叫做‘Lite’模式来处理。@Bean方法在lite模式下将被容器当成工厂方法来处理，就像XML里面声明的factory-method一样。恰当的应用于
+       范围和声明周期的回调中。在本例中，包含类仍然未被修改，并且对于包含类或工厂方法没有不寻常的约束。
+       
+       与在@Configuration类里面的@Bean方法相反，'inter-bean references' 在Lite模式下不被支持。相反，在Lite模式下一个@Bean方法调用另一个@Bean
+       方法，这个调用就是标准的Java方法调用，Spring不会通过CGLIB 代理来阻止这个调用，这就好比代理模式下的@Transactional调用，Spring不会阻止这个
+       调用。Spring只在AspectJ 模式下干那些事。
+       &#064;Component
+        public class Calculator {
+            public int sum(int a, int b) {
+                return a+b;
+            }
+
+            &#064;Bean
+            public MyBean myBean() {
+                return new MyBean();
+            }
+        }
+        
+        Bootstrapping
+       参阅@Configuration的Javadoc 的详细信息，包含怎样去引导容器使用AnnotationConfigApplicationContext 和它的friends.
+       BeanFactoryPostProcessor 返回了一个@Bean 方法。
+       必须特别考虑@Bean方法返回org.springframework.beans.factory.config.BeanFactoryPostProcessor BeanFactoryPostProcessor类（简称BFPP）.
+       因为BFPP对象在容器的生命周期里会被更早的实例化，他们能够干扰@Configuration类里一些注解的加工，比如@Autowired、@Value、@PostConstruct，
+       为了避免这些生命周期的问题，需要标记BFPP 的返回@Bean方法为static. 比如：
+       &#064;Bean
+        public static PropertyPlaceholderConfigurer ppc() {
+            // instantiate, configure and return ppc ...
+        }
+        通过标记方法为static，不需要实例化它声明的@Configuration类就可以调用，这样就避免了上面提到的生命周期冲突问题。注意，无论static Bean
+        方法将不在域和AOP语义中增强。这在BFPP情况下是可行的，因为它们通常不被其它的@Bean方法调用。作为提醒，一个WARN-level级别的日志信息将
+        被告知对于那些非static的@Bean方法返回BeanFactoryPostProcessor及它子类。
