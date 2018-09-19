@@ -21,3 +21,32 @@
     通过扫描，如果a.pro和b.pro里面有重复值，那么哪个后注册的就win或者重写，这里我的DruidPropertiesDev类在后面，而server和dev 属性文件的key值都一样
     所以，dev把server覆盖了。
     
+@Bean
+  翻译注释：
+      表明一个方法产生一个bean,并且交由Spring容器管理
+      概览
+      这个注解的所有属性的名字和语义是有意和Spring XML 的那些bean标签相同的，例如：
+      @Bean
+      public MyBean myBean() {
+        // instantiate and configure MyBean obj
+        return obj;
+      }
+      Bean 的名称（复数）
+      当一个name属性是有效的，默认的策略就是用@Bean方法的名字来决定Bean的名字。这是方便和直观的，但如果明确要求一个名字的话，这个name属性（或者它的
+      value别名（复数））可能被使用。同时注意这个name接受一个字符数组，允许多个名字。 （也就是说一个主bean 名+一个或多个别名）来作为一个单例bean.
+      @Bean({"b1", "b2"}) // bean available as 'b1' and 'b2', but not 'myBean'
+      public MyBean myBean() {
+        // instantiate and configure MyBean obj
+        return obj;
+      }
+      范围，依赖，主要，懒  （Scope,Depends,Primary,Lazy）
+      注意，这个Bean注解不提供Scope,Depends,Primary,Lazy的属性，要想实现这些属性，就必须联合Scope,Depends,Primary,Lazy来实现。比如：
+        @Bean
+        @Scope("prototype")
+        public MyBean myBean() {
+            // instantiate and configure MyBean obj
+            return obj;
+        }
+        @Configuration 类里面的@Bean方法
+        通常，@Bean是在@Configuration类中声明的。在这种情况下，bean方法在本类中直接引用其它的@Bean方法。这样就保证beans之间的引用是健壮的类型和可
+        操作性的。因此这些被叫做“内部bean引用”保证了切面范围和AOP含义，就像getBean()去查找。这些是最初的“Spring JavaConfig”项目中已知的语义，该项         目需要在运行时对每个配置类进行CGLIB子类化。因此，作为一个结果， @Configuration类和它的工厂方法不能够标记为final和private.例如：
