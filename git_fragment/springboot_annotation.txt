@@ -342,4 +342,11 @@
           参考TestContext framework reference documentation for details
           
           添加@Enable注解可以具有内置的Spring 特点，
-          Spring 的特点比如说异步方法的执行，跑批任务的执行，注解事务管理，
+          Spring 的特点比如说异步方法的执行，跑批任务的执行，注解事务管理，甚至SpringMVC也能够通过@Configuring配置具有相关能力，通过运用
+	  它们各自的Enable注解，查看
+	   {@link org.springframework.scheduling.annotation.EnableAsync @EnableAsync},
+ 	   {@link org.springframework.scheduling.annotation.EnableScheduling @EnableScheduling},
+ 	   {@link org.springframework.transaction.annotation.EnableTransactionManagement @EnableTransactionManagement},
+ 	   {@link org.springframework.context.annotation.EnableAspectJAutoProxy @EnableAspectJAutoProxy},
+ 	   and {@link org.springframework.web.servlet.config.annotation.EnableWebMvc @EnableWebMvc}
+	  
