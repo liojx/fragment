@@ -1,3 +1,43 @@
 @Value
   注释翻译：
-   
+  这是一个字段或者方法/构造函数参数级别的注解，表明受影响参数的默认值表达式。
+  通常被用作表达式驱动的依赖注入，同时也支持处理器方法参数的动态解决方式，例如，in Spring MVC.
+  
+  一个惯例的用法是利用如#{systemProperties.myProp}风格的表达式分配默认的字段值。
+  注意，@Value注解实际的执行是通过org.springframework.beans.factory.config.BeanPostProcessor，那就以为这你不能够在
+  org.springframework.beans.factory.config.BeanPostProcessor 和
+  org.springframework.beans.factory.config.BeanFactoryPostProcessor BeanFactoryPostProcessor 
+  类里面使用它。
+  请参阅AutowiredAnnotationBeanPostProcessor的Javadoc，（默认情况下，检查是否存在此注解)
+ 
+@Autowired
+  注释翻译：
+  标记一个构造函数、字段、setter方法或者config方法通过Spring的依赖注入工具完成自动装配。
+  在任何给定的bean类中，只有一个构造函数(最多)可以携带这个注解，表明当用做一个Spring bean时这构造器去自动装配。所以，一个构造器不必是public。
+  在构建bean之后，在调用任何配置方法之前，就会立即注入字段。因此一个config field 不必是public的。
+  配置方法可以有任意的名称和任意数量的参数;每个参数都将与Spring容器中的匹配bean自动被装备。Bean属性的setter方法实际上只是一般配置方法的一种特例。
+  这样的config method 不必是public。
+  
+  对于多个参数的方法，“required”参数适用于所有参数。
+  
+  在一个java.util.Collection 或者java.util.Map 的依赖类型情况下，容器将自动装配匹配这些声明的value type 的所有beans. 如果是一个map,key 必须是
+  String 类型并且将被解析为响应的bean 的名字。
+  
+  注意，实际的注入是通过 org.springframework.beans.factory.config.BeanPostProcessor
+  那就意味着你不能够用@Autowired 去引用注入 org.springframework.beans.factory.config.BeanPostProcessor 
+  和 org.springframework.beans.factory.config.BeanFactoryPostProcessor 类型
+  请参阅AutowiredAnnotationBeanPostProcessor 的java doc.（默认情况下，检查是否存在此注解）。
+  
+  @Repository
+    注释翻译：
+      表明被注解的类是一个Repository，最初定义是在Domain-Driven Design (Evans, 2003) 被看作是 封装存储、检索、搜索行为的机制，模拟Objects的
+      collection.
+      
+      实现传统J2EE模式（如”Data Access Objects") [数据访问对象]的团队可能将这种模板应用于DAO类，尽管在这样做之前应该理解Data Access Object 
+      和DDD-style 存储库之间的区别。这个注解是一个通用目的的模板，个别团队狭义化了它们的语义，合理的使用它。
+      
+      这样注释的类适合 Spring  org.springframework.dao.DataAccessException DataAccessException 翻译，当联合
+      org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor 一起使用时。  还阐明了带该注释的类在整个应用程序体系结构
+      中的角色，用于工具、方面等。
+      
+      从Spring 2.5 开始，这个注释还充当了@Component的特殊例，允许通过类路径扫描自动检测实现类。
