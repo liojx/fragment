@@ -116,7 +116,7 @@
 	      String[] value() default {};
         
         /**这个bean的名字，或者如果有多个name,一个主bean name + 其它别名
-         * 如果左边未指定，这个bean的name是这个被注解的方法的名字。 如果指定，这个方法的名字将被忽略。
+         * 如果未指定，这个bean的name是这个被注解的方法的名字。 如果指定，这个方法的名字将被忽略。
          * 这个bean的名字和别名也可以通过value属性来配置，前提是没有其它属性声明。
         */
         @AliasFor("value")
@@ -355,4 +355,9 @@
 	    1.@Configuration 必须是 non-final
 	    2.@Configuration 必须是 non-local(不能声明在方法中)
 	    3.嵌套的@Configuration类必须是 static
-	  
+	  /**明确的指定这个Spring bean定义的名字关联这个Configuration类，如果未指定（普通情况），一个bean名称将自动生成。
+	  *  如果这个Configuration类是通过组件扫描或者直接供给一个AnnotationConfigApplicationContext获得，自定义名称才被应用。
+	  *  如果这个Configuration类被看作一个传统的XML bean定义，这个bean 的name/id 将优先
+	  *  @return  指定的bean name,如果有的话
+	  */
+	    String value() default "";
