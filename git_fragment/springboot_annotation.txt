@@ -349,4 +349,10 @@
  	   {@link org.springframework.transaction.annotation.EnableTransactionManagement @EnableTransactionManagement},
  	   {@link org.springframework.context.annotation.EnableAspectJAutoProxy @EnableAspectJAutoProxy},
  	   and {@link org.springframework.web.servlet.config.annotation.EnableWebMvc @EnableWebMvc}
+	   的详情
+	   
+	    @Configuration类的约束
+	    1.@Configuration 必须是 non-final
+	    2.@Configuration 必须是 non-local(不能声明在方法中)
+	    3.嵌套的@Configuration类必须是 static
 	  
