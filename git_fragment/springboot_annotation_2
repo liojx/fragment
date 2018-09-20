@@ -9,7 +9,8 @@
   org.springframework.beans.factory.config.BeanFactoryPostProcessor BeanFactoryPostProcessor 
   类里面使用它。
   请参阅AutowiredAnnotationBeanPostProcessor的Javadoc，（默认情况下，检查是否存在此注解)
- 
+
+============================================================分割线===========================================================
 @Autowired
   注释翻译：
   标记一个构造函数、字段、setter方法或者config方法通过Spring的依赖注入工具完成自动装配。
@@ -27,7 +28,8 @@
   那就意味着你不能够用@Autowired 去引用注入 org.springframework.beans.factory.config.BeanPostProcessor 
   和 org.springframework.beans.factory.config.BeanFactoryPostProcessor 类型
   请参阅AutowiredAnnotationBeanPostProcessor 的java doc.（默认情况下，检查是否存在此注解）。
-  
+ 
+ ============================================================分割线===========================================================
   @Repository
     注释翻译：
       表明被注解的类是一个Repository，最初定义是在Domain-Driven Design (Evans, 2003) 被看作是 封装存储、检索、搜索行为的机制，模拟Objects的
