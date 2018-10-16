@@ -1,4 +1,6 @@
 1. 区别
     ====> 抽象类可以有变量，变量和我们普通类无异；接口也可有变量，但始终是public static final的。
     ====> 接口无构造，抽象类有构造，都不能实例，但都可通过匿名实例。
-    ====> 接口的方法都是public abstract的。而抽象类可以不是public,但必须是可见的，private不行；可以不是abstract的。
+    ====> 接口的方法都是public abstract的。而抽象类的abstract方法可以不是public,但必须是可见的，private不行；如果是普通方法（没abstract）可以是             private。
+    ====> abstract 修饰的方法就不能有方法体。
+    ====> 接口不能有静态代码块，可以有静态方法，静态方法就必须不能是abstract，且必须实现。而接口静态代码块和静态方法都可以有。
