@@ -33,3 +33,7 @@ Editor-->Code Style --> java，不要勾选Use tab character -->Indent设置为4
 
 1.1 取消xml屎黄色背景 ：打开设置-->Editor-->Color Scheme-->General-->Code-->Injected Language Fragment 取消 Background前面复选框的勾
     第二步：Editor-->Inspections-->SQL-->No data sources configured 和SQL dialect detection 前面的复选框勾取消
+1.2 tomcat 控制台中文乱码解决：Tomcat7-->Server 中的VM options 增加-Dfile.encoding=UTF-8
+    main方法控制台中文乱码解决：Settings-->Editor-->File Encodings-->Global Encoding 改UTF-8 ，Project Encoding 改UTF-8，下面的 Default
+    encoding for properties files 也更改成UTF-8，同时在IDEA的安装目录的bin目录下的idea64.exe.vmoptions 和idea.exe.vmoptions 文件最后一行
+    都加上-Dfile.encoding=UTF-8，重启idea,rebuild project编码正常。
