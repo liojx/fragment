@@ -28,3 +28,8 @@ Ctrl + alt + 句号： 代码折叠
 不要勾选Use tab character 
 默认设置Indent为4个空格，勾选就不知道一个tab按键代表几个空格了。路径在
 Editor-->Code Style --> java，不要勾选Use tab character -->Indent设置为4
+
+补充选项：
+
+1.1 取消xml屎黄色背景 ：打开设置-->Editor-->Color Scheme-->General-->Code-->Injected Language Fragment 取消 Background前面复选框的勾
+    第二步：Editor-->Inspections-->SQL-->No data sources configured 和SQL dialect detection 前面的复选框勾取消
