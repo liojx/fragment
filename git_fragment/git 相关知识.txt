@@ -165,3 +165,4 @@
 	%s  提交说明
 	第一种例子：git log --pretty=oneline
 	第二种例子：git log --pretty=format:"%an %ae %ad %cn %ce %cd %cr %s" --graph
+		 : git log --pretty=format:"%H %cn %cd %s" --graph
