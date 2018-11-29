@@ -56,6 +56,7 @@
 
     到这里就该差不懂明白了，压根就不需要记住所谓的maven常用命令。 用mvn 阶段名 大体上能够满足编译，测试的要求。
     但是为了简便，还是写一下：
+    mvn clean 把根目录下的target目录删除
     mvn clean compile  编译
     mvn clean test 测试
     mvn clean package 打包
@@ -64,3 +65,37 @@
     mvn cargo:run 通过cargo插件，把生成的war包部署到本地服务器，并启动。（注意要先运行 mvn clean package 打包）
     mvn cargo:redeploy 通过cargo插件，把生成的war包部署到远程服务器：如果已经有了，就先undeploy再deploy，
     如果没有直接deploy（注意要先运行 mvn clean package 打包，并且远程服务器是启动的）（怎么配置看Maven Cargo 远程不是到tomcat7x）
+    
+    
+    >> 这里用eclipse 执行run as maven build... 在goals里面填上 clean compile 时，报错让我用jdk，而不用jre，把jre换成jdk就可以了。
+    
+    >> 构建web 项目
+      mvn archetype:create -DgroupId=com.mycompany.app -DartifactId=myWebApp 
+      -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false
+    mvn archetype:create或者mvn archetype:generate　　固定写法
+　　-DgroupId　　　　　　　　　　　　　　　　　　　　　　　组织标识（包名）
+　　-DartifactId　　　　　　　　　　　　　　　　　　　　　　项目名称
+　　-DarchetypeArtifactId　　  　　　　　　　　　　　　　　指定ArchetypeId，maven-archetype-quickstart，
+                创建一个Java Project；maven-archetype-webapp，创建一个Web Project
+　　-DinteractiveMode
+    是否使用交互模式
+    >>  maven-archetype-webapp 这是构建web  ,maven-archetype-quickstart 这是一个java project 。
+    >> 构件jar 包
+      mvn clean package
+    >> groupId：组织标识（包名）
+        artifactId：项目名称
+        version：项目的当前版本
+        packaging：项目的打包方式，最为常见的jar、war、ear、pom 
+        
+    >> 聚合
+     <modules>
+      <module>assembly</module>
+      <module>app/rpc-api</module>
+      <module>app/rpc-api-impl</module>
+      <module>app/core</module>
+      <module>app/dal</module>
+      <module>app/common</module>
+      <module>app/test</module>
+    </modules>
+    
+    >> 父模块用<dependencyManagement> ，这样的好处是子模块可以有选择行的继承，而不需要全部继承
