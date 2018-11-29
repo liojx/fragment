@@ -1,1 +1,66 @@
 
+1.先来看看Eclipse Run as 里面的几个选项...
+  >> maven build ,当执行这个命令，会出错，mvn告诉你，没有一个mvn的生命周期阶段叫做build阶段，整个mvn的阶段是这样的：validate, initialize, 
+  generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, 
+  process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, 
+  package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy, pre-clean, clean, post-clean, 
+  pre-site, site, post-site, site-deploy.
+  然后我随便拎了几个阶段，前面加mvn，发现都可以success。
+  所以，这个应该是build 以上面哪种方式
+  >> 接下来的maven clean ,maven generate-resources,maven install ,maven test 都可以从上面找到。那接下来，一个个试试。
+  >> maven 每个生命周期都是独立的，但是都是前后依赖的。maven主要有三个阶段 default、clean 和site.
+  
+  >> validate, initialize, 
+  generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, 
+  process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, 
+  package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy 这些都属于default
+  
+  >> pre-clean, clean, post-clean 这些属于clean
+  
+  >> pre-site, site, post-site, site-deploy 这些属于site
+  
+  >> 也就是说我执行 mvn post-clean ,那么mvn会自动把 pre-clean 和 clean都执行了。这就是前后依赖。
+  
+  >> 记住比较重要的一点，maven的生命周期是和目标插件绑定的，是什么意思呢？也就说你自己很牛逼，可以自定义一个maven生命周期
+          <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.1</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+       呐，verify阶段绑定到 maven-source-plugin:jar-no-fork目标。那么执行 mvn verify是就会执行 maven-source-plugin:jar-no-fork。
+       那么我们现在在回过头来再看命令 mvn clean deploy ，就会后更深的解释了：首先还是告诉maven，我要执行到clean阶段，那么maven会找内置绑定，
+       发现clean是与 maven-clean-plugin:clean绑定的，那么maven就会调用maven-clean-plugin:clean；接下来告诉maven，我要执行到deploy阶段，
+       还是一样，maven发现该阶段与maven-deploy-plugin:deploy绑定了，那么maven就会调用该插件了。
+       
+           生命周期阶段					      目标插件									          执行任务
+    process-resources		maven-resources-plugin:resources	        复制注资源文件至主输出目录
+    compile 				maven-compiler-plugin:compile			            编译主代码至主输出目录
+    process-test-resources	maven-resources-plugin:testResources  复制测试资源文件至测试输出目录
+    test-compile			maven-compiler-plugin:testCompile		        编译测试代码至测试输出目录
+    test 					maven-surefire-plugin:test					            执行测试用例
+    package					maven-jar-plugin:jar					                创建项目jar包
+    install					maven-install-plugin:install			            将项目输出构件安装到本地仓库
+    deploy 					maven-deploy-plugin:deploy				            将项目输出构件部署到远程仓库
+    
+    命令行配置插件参数
+　　mvn test -Dmaven.test.skip=true
+　　记住 -Dxxx是java设置参数的方式。
+
+    到这里就该差不懂明白了，压根就不需要记住所谓的maven常用命令。 用mvn 阶段名 大体上能够满足编译，测试的要求。
+    但是为了简便，还是写一下：
+    mvn clean compile  编译
+    mvn clean test 测试
+    mvn clean package 打包
+    mvn clean install 把生成的jar/war包复制到本地repository(就是~/.m2/repository下面)
+    mvn clean deploy 把生成的jar/war包发送到远程repository（建议配置了私服，那就是往私服发送了）
+    mvn cargo:run 通过cargo插件，把生成的war包部署到本地服务器，并启动。（注意要先运行 mvn clean package 打包）
+    mvn cargo:redeploy 通过cargo插件，把生成的war包部署到远程服务器：如果已经有了，就先undeploy再deploy，
+    如果没有直接deploy（注意要先运行 mvn clean package 打包，并且远程服务器是启动的）（怎么配置看Maven Cargo 远程不是到tomcat7x）
