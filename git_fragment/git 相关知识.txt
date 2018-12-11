@@ -110,6 +110,12 @@
 	所以这里就用eclipse 对应一下:
 	working tree 改变的文件集  <====> eclipse 放在 Unstaged Changes
 	Index 的文件集             <====> eclipse 放在 Staged Changes 
+	对应的命令：
+	1：git reset –mixed：此为默认方式，不带任何参数的git reset，即时这种方式，它回退到某个版本，只保留源码，回退commit和index信息
+
+	2：git reset –soft：回退到某个版本，只回退了commit的信息，不会恢复到index file一级。如果还要提交，直接commit即可
+
+	3：git reset –hard：彻底回退到某个版本，本地的源码也会变为上一个版本的内容
 12.更改邮箱和用户名
 	我今天查看git log时，发现我的代码提交用户名是liaodaye ,邮箱是liao_2464@163.com,是我个人邮箱和我个人昵称，尴尬。这里讲一下更改邮箱和用户	     名。
 	可以直接用命令改：
