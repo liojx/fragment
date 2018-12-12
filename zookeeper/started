@@ -1,0 +1,218 @@
+1入门:与ZooKeeper协调分布式应用
+本文档包含一些信息，可以帮助您快速开始使用ZooKeeper。它的目的是
+主要针对希望试用它的开发人员，并包含了简单的安装说明
+对于单个ZooKeeper服务器，需要几个命令来验证它是否正在运行，以及一个简单的命令
+编程的例子。最后，为了方便起见，有几个部分涉及更多内容
+复杂的安装，例如运行复制部署和优化
+事务日志。但是，请参阅商业部署的完整说明
+请参阅动物园管理员指南。
+1.1的必备条件
+参见管理指南中的系统需求。
+1.2下载
+要获得ZooKeeper发行版，请从Apache下载一个最新的稳定版本
+下载镜像。
+1.3独立操作
+在独立模式下设置ZooKeeper服务器非常简单。包含服务器
+在单个JAR文件中，安装包括创建配置。
+下载了一个稳定的ZooKeeper版本后，将其解压并将cd解压到根目录
+要启动ZooKeeper，您需要一个配置文件。下面是一个示例，在conf/zoo.cfg中创建它:
+
+tickTime=2000
+dataDir=/var/lib/zookeeper
+clientPort=2181
+这个文件可以调用任何东西，但是为了便于讨论，我们将它称为conf/zoo.cfg。
+更改dataDir的值以指定现有目录(从空目录开始)。这里有
+每个字段的含义:
+tickTime
+动物管理员使用的基本时间单位，以毫秒为单位。它被用来做心跳和
+最小会话超时将是tickTime的两倍。
+dataDir
+存储内存数据库快照的位置，除非另有说明，
+数据库更新的事务日志。
+clientPort
+监听客户机连接的端口
+现在您已经创建了配置文件，您可以启动ZooKeeper:
+
+bin/zkServer.sh start
+
+ZooKeeper使用log4j记录消息——更多详细信息请参见
+程序员的指导。您将看到日志消息到达控制台(默认)和/或日志
+文件取决于log4j配置。
+这里概述的步骤以独立模式运行ZooKeeper。没有复制，所以
+如果ZooKeeper进程失败，服务将会宕机。这对于大多数开发来说都很好
+情况，但要以复制模式运行ZooKeeper，请参见运行复制
+动物园管理员。
+1.4管理动物园管理员的存储
+对于长期运行的生产系统，动物园管理员的存储必须由外部管理
+(dataDir和日志)。有关维护的详细信息，请参阅有关维护的部分。
+1.5连接ZooKeeper
+
+bin/zkCli.sh -server 127.0.0.1:2181
+
+这允许您执行简单的、类似文件的操作。
+一旦你联系上了，你应该会看到这样的东西:
+
+Connecting to localhost:2181
+log4j:WARN No appenders could be found for logger (org.apache.zookeeper.ZooKeeper).
+log4j:WARN Please initialize the log4j system properly.
+Welcome to ZooKeeper!
+JLine support is enabled
+[zkshell: 0]
+
+在shell中，键入help以获得可以从客户机执行的命令列表，
+如:
+
+[zkshell: 0] help
+ZooKeeper host:port cmd args
+get path [watch]
+ls path [watch]
+set path data [version]
+delquota [-n|-b] path
+quit
+printwatches on|off
+createpath data acl
+stat path [watch]
+listquota path
+history
+setAcl path acl
+getAcl path
+sync path
+redo cmdno
+addauth scheme auth
+delete path [version]
+setquota -n|-b val path
+
+从这里开始，您可以尝试一些简单的命令来感受这个简单的命令行
+接口。首先，像在ls中一样，发出list命令，生成:
+
+[zkshell: 8] ls /
+[zookeeper]
+
+接下来，通过运行create /zk_test my_data创建一个新的znode。这会创建一个新的
+并将字符串“my_data”与节点关联。您应该看到:
+
+[zkshell: 9] create /zk_test my_data
+Created /zk_test
+
+Issue another ls / command to see what the directory looks like:
+[zkshell: 11] ls /
+[zookeeper, zk_test]
+
+
+注意，现在已经创建了zk_test目录。
+接下来，通过运行get命令验证数据是否与znode关联，如下所示:
+
+[zkshell: 12] get /zk_test
+my_data
+cZxid = 5
+ctime = Fri Jun 05 13:57:06 PDT 2009
+mZxid = 5
+mtime = Fri Jun 05 13:57:06 PDT 2009
+pZxid = 5
+cversion = 0
+dataVersion = 0
+aclVersion = 0
+ephemeralOwner = 0
+dataLength = 7
+numChildren = 0
+
+We can change the data associated with zk_test by issuing the set command, as in:
+
+[zkshell: 14] set /zk_test junk
+cZxid = 5
+ctime = Fri Jun 05 13:57:06 PDT 2009
+mZxid = 6
+mtime = Fri Jun 05 14:01:52 PDT 2009
+pZxid = 5
+cversion = 0
+dataVersion = 1
+aclVersion = 0
+ephemeralOwner = 0
+dataLength = 4
+numChildren = 0
+[zkshell: 15] get /zk_test
+junk
+cZxid = 5
+ctime = Fri Jun 05 13:57:06 PDT 2009
+mZxid = 6
+mtime = Fri Jun 05 14:01:52 PDT 2009
+pZxid = 5
+cversion = 0
+dataVersion = 1
+aclVersion = 0
+ephemeralOwner = 0
+dataLength = 4
+numChildren = 0
+注意，我们在设置数据之后做了一个get，它确实改变了。
+最后，删除节点，发出:
+[zkshell: 16] delete /zk_test
+[zkshell: 17] ls /
+[zookeeper]
+[zkshell: 18]
+
+现在就到这里。要了解更多信息，请继续本文的其余部分，并参见
+程序员的指导。
+
+1.6向ZooKeeper编程
+ZooKeeper有Java绑定和C绑定。它们在功能上是等价的。C
+绑定有两种变体:单线程绑定和多线程绑定。这些只是在方式上有所不同
+消息传递循环已经完成。有关更多信息，请参见
+ZooKeeper程序员使用不同api的示例代码指南。
+
+1.7运行复制的ZooKeeper
+在独立模式下运行ZooKeeper便于评估、开发，
+和测试。但是在生产中，您应该以复制模式运行ZooKeeper。一个复制
+同一应用程序中的服务器组称为仲裁，在复制模式下称为all
+仲裁中的服务器具有相同配置文件的副本。
+
+
+注意:
+对于复制模式，至少需要三个服务器，强烈建议这样做
+你有奇数台服务器。如果您只有两个服务器，那么您就处于这种情况
+如果其中一个失败，则没有足够的机器形成多数仲裁。两台服务器是
+本质上不如单个服务器稳定，因为有两个单点故障。
+
+所需的conf /动物园。用于复制模式的cfg文件与用于独立模式的文件类似
+模式，但有一些不同。下面是一个例子:
+
+tickTime=2000
+dataDir=/var/lib/zookeeper
+clientPort=2181
+initLimit=5
+syncLimit=2
+server.1=zoo1:2888:3888
+server.2=zoo2:2888:3888
+server.3=zoo3:2888:3888
+
+对于这两个超时，使用tickTime指定时间单位。在这个例子中,
+initLimit的超时时间是每秒钟2000毫秒的5次滴答，即10秒。
+表单服务器的条目。列出组成ZooKeeper服务的服务器。当
+服务器启动时，它通过在数据中查找文件myid来知道它是哪个服务器
+目录中。该文件包含服务器号(ASCII)。
+最后，注意每个服务器名后面的两个端口号:“2888”和“3888”。同事使用
+前一个端口连接到其他对等点。这样的连接是必要的，以便对等
+可以沟通，例如，同意更新的顺序。更具体地说,一个
+ZooKeeper服务器使用这个端口将追随者连接到leader。当一个新的领导者出现时，
+追随者使用这个端口打开到领导者的TCP连接。因为默认的领导者
+选举也使用TCP，我们目前需要另一个端口的领导人选举。这是
+服务器条目中的第二个端口。
+
+注意:
+如果希望在一台机器上测试多个服务器，请将服务器名指定为localhost
+独特的quorum & leader选举端口(在上面的例子中是2888:3888,2889:3889,2890:3890)
+为每个服务器。X在服务器的配置文件中。当然，不同的数据adir和不同的客户机端口是不同的
+同样必要的是(在上面复制的例子中，运行在单个本地主机上，您仍然需要
+三个配置文件)。
+请注意，在一台机器上设置多个服务器不会产生任何冗余。
+如果发生了什么事情导致机器死机，所有的动物园管理员服务器都会死机
+是离线的。完全冗余要求每个服务器都有自己的机器。它必须是完全的
+单独的物理服务器。同一物理主机上的多个虚拟机仍然容易受到攻击
+主机完全失败。
+
+1.8其他优化
+还有一些其他配置参数可以大大提高性能:
+•要获得较低的更新延迟，重要的是要有专门的事务日志
+目录中。默认情况下，事务日志与数据快照放在同一个目录中
+和myid文件。的参数指示要使用的另一个目录
+事务日志。
+•[待定:其他配置参数是什么?]
