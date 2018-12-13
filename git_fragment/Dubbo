@@ -13,3 +13,29 @@
       O . Container 运行容器，就是服务提供方运行的容器。
       O . Provider 服务提供方，就是我们上面说的Server.
       O . Registry 注册中心，呐，就上面说的，服务太多，访问太复杂，就把服务注册到注册中心上。dubbo推荐的是Zookeeper.他自己定位：分布式
+      
+    3. 如何应用？
+      O . 我这里有两个Maven 工程，第一个叫ordinary_tst 另一个叫zhehan,那么我就用第一个提供服务，第二个当消费方。
+      O . 具象的查看，
+            从git 下载zip  ,下载地址为： https://github.com/apache/incubator-dubbo
+            这里有Clone or Download  ,就download 为zip , 解压到 incubator-dubbo-2.5.x，然后cmd 到这个目录去打包,
+            然后就是maven打包 maven clean install,最后会在 dubbo-admin\target目录下生成一个war 包,dubbo-admin-2.5.10.war。
+            把这个包更改个名字，dubbo-admin.war,然后丢到tomcat/webapps/下，启动tomcat ,就可以通过
+            http://localhost:8080/dubbo-admin/ 输入root/root 看到图形化界面了。
+            
+            从apach官网下载zookeeper. 网址为 http://mirrors.hust.edu.cn/apache/zookeeper/
+            解压，然后去config目录下去配置zoo.cfg.
+            最后启动zookeeper,在bin目录下，启动windows的脚本 zkServer.cmd 。启动不报错就OK，这玩意儿没有图形化界面，再去下载一个图像化工具zkui
+            
+            
+             去下载，https://github.com/DeemOpen/zkui.git，mvn clean install，会两个jar包：zkui-2.0-SNAPSHOT.jar和
+             zkui-2.0-SNAPSHOT-jar-with-dependencies.jar，用的是第二个，配置文件 config.cfg，执行起来
+             java -jar target/zkui-2.0-SNAPSHOT-jar-with-dependencies.jar，
+             浏览器中运行http://127.0.0.1:9090，账号密码 admin/manager，就能看见图形化界面了。
+      O . 一顿操作后，把ordinary_tst 的服务写好后，provider.xml注册到zookeeper里面后，把tst install,此时就会安装到我的maven本地库里面了。
+         然后我的zhehan项目的pom.xml就可以引用ordinary_tst了。OK
+         那么就可以在zhehan里面去配置consume.xml注册到注册中心，去取服务方的东西了。直接调用，无侵入。
+             
+            
+            
+            
