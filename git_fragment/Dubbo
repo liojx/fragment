@@ -12,4 +12,4 @@
     2.好由于上面的原因所以就诞生了Dubbo,Dubbo的架构大致有以下几个部分组成。
       O . Container 运行容器，就是服务提供方运行的容器。
       O . Provider 服务提供方，就是我们上面说的Server.
-      O . Registry 注册中心，呐，就上面说的，服务太多，访问太复杂，就把服务注册到注册中心上。dubbo推荐的是Zookeeper.
+      O . Registry 注册中心，呐，就上面说的，服务太多，访问太复杂，就把服务注册到注册中心上。dubbo推荐的是Zookeeper.他自己定位：分布式
