@@ -1,0 +1,2 @@
+1. 安装Eclipse的反编译工具：Help - Eclipse Marketplace  - 键入 Decompiler - 搜索 - 安装 ，第二步： General - Editors - File Associations - *.class
+和 *.class without source 都要默认 Decompiler ，光默认前者是不可以的。重启搞定。
