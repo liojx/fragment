@@ -1,3 +1,6 @@
 1. psvm -- main方法。sout -- system.out.println
 2. 移动当前行：alt + shift + pagedown / pageup 
-3.
+3. 根据关键字查找：ctrl + F3 ，反向查找 shift + F3
+4. 选择Debug : alt + shift + F9
+5. 一步一步debug : F7
+6. 跳过debug : F8
