@@ -8,3 +8,5 @@
 8. 复制当前行 ： ctrl + d
 9. 删除当前行 ： ctrl + y
 10. 查找代码所在的位置 ： alt + F1
+11. 查找文本： ctrl + f , 全局查找文本： ctrl + shift + f , 搜索任何东西 ： shift + shift 
+12. 按名字搜索类： ctrl + n, 按名字搜索文件名： ctrl + shift + n
