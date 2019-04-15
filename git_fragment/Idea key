@@ -4,3 +4,6 @@
 4. 选择Debug : alt + shift + F9
 5. 一步一步debug : F7
 6. 跳过debug : F8
+7. 打开最近文件菜单 ：ctrl + e
+8. 复制当前行 ： ctrl + d
+9. 删除当前行 ： ctrl + y
