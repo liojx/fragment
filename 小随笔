@@ -1,2 +1,5 @@
 1. 安装Eclipse的反编译工具：Help - Eclipse Marketplace  - 键入 Decompiler - 搜索 - 安装 ，第二步： General - Editors - File Associations - *.class
 和 *.class without source 都要默认 Decompiler ，光默认前者是不可以的。重启搞定。
+
+2. idea检出svn项目报错：Cannot load supported formats: Cannot run program "svn": CreateProcess error=2， 我解决的方式为：version control--
+subversion--general 下面的三个复选框都不选，applay即可。
