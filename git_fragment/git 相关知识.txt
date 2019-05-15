@@ -71,12 +71,14 @@
 	解析一下，lsj是上面用git remote add 的远程库名，zlsj_test_branch1是本地的当前分支
 7. 分支管理
 	分支管理
-	查看分支：git branch
+	查看分支：git branch -a
 	创建分支：git branch <name>
 	切换分支：git checkout <name>
 	创建+切换分支：git checkout -b <name>
 	合并某分支到当前分支：git merge <name>
 	删除分支：git branch -d <name>
+        删除远程分支：git push origin --delete <name>
+
 8. 概念逻辑
 	origin:dev
 	这是库origin下的dev分支。
