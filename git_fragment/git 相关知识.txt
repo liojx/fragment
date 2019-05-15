@@ -79,6 +79,7 @@
 	删除分支：git branch -d <name>
         删除远程分支：git push origin --delete <name>
         删除本地分支：git branch -D <name> ，这个属于强制删除，但是假如你在当前分支使用这个命令想删除自己分支，是不行的。你需要切换到其他分支来删除当前分支。
+        关联本地分支和上游分支：git branch --set-upstream-to=origin/V2.5-test V2.5-test
 8. 概念逻辑
 	origin:dev
 	这是库origin下的dev分支。
