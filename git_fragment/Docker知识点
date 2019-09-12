@@ -1,2 +1,14 @@
 1. 基本概念
   容器，包含镜像、仓库和容器。
+2. 虚拟机相关
+   编辑-设置虚拟机网络，这里设置为自动的桥接模式才能够连外网。如果要想本地xshell访问的话，需要更改成vmnet1仅主机访问，然后把本地的ip和虚拟机的ip设置成
+   同一个网段的话，就可以了。
+3. docker 安装相关
+   安装虚拟机的时候有提示选择源，貌似我都一路next，默认的源是cn.archive.unbuntu.com，这玩意老是用apt-get update，有很多都拉不下来。
+   最后我把/etc/apt/sources.list的地址更改成http://mirrors.aliyun.com/ubuntu。com 
+   然后把docker的源改成163的。这样就拉下来了。之前yum 和 service命令都用不起。
+   
+   dble网站给的docker-compose地址：https://raw.githubusercontent.com/actiontech/dble/master/docker-images/docker-compose.yml，
+   然后把这个yml丢到/usr/local/bin/docker-compose目录下，这个目录也是我自己创建的。
+   赋予执行权限： /usr/local/bin/docker-compose
+   
