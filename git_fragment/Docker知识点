@@ -3,6 +3,19 @@
 2. 虚拟机相关
    编辑-设置虚拟机网络，这里设置为自动的桥接模式才能够连外网。如果要想本地xshell访问的话，需要更改成vmnet1仅主机访问，然后把本地的ip和虚拟机的ip设置成
    同一个网段的话，就可以了。
+   虚拟机装ssh的时候出现：
+   sudo apt-get install openssh-server 
+    安装openssh-server,如果顺利的话会安装成功,如果遇到以下问题：
+    openssh-server : Depends: openssh-client (= 1:6.6p1-2ubuntu2.8)
+     Recommends: ssh-import-id but it is not going to be installed
+    E: Unable to correct problems, you have held broken packages
+    原因如下：
+    这是因为,openssh-server是依赖于openssh-clien的,那ubuntu不是自带了openssh-client吗?
+    原由是自带的openssh-clien与所要安装的openssh-server所依赖的版本不同,这里所依赖的版本是：
+    1:6.6p1-2ubuntu2.8
+    所以要安装对应版本的openssh-clien,来覆盖掉ubuntu自带的
+    sudo apt-get install?openssh-client=1:6.6p1-2ubuntu1
+
 3. docker 安装相关
    安装虚拟机的时候有提示选择源，貌似我都一路next，默认的源是cn.archive.unbuntu.com，这玩意老是用apt-get update，有很多都拉不下来。
    最后我把/etc/apt/sources.list的地址更改成http://mirrors.aliyun.com/ubuntu。com 
