@@ -108,6 +108,7 @@ git push origin <本地src分支> : <远程dst分支>，由下面8的概念逻�
 	类型一：软，只重置HEAD
 	类型二：混合，重置HEAD 和 index
 	类型三: 硬，重置 HEAD 、index  和working tree
+	类型四： 保留，即保留本地更改，直接回退到某个版本。
 	现在需要解释一下这三个概念了：
 	HEAD：这是我当前分支最顶端的别名，也就是指向我最近一次提交的。
 	Index: 这个被称为staging area, 它对应的是eclipse的Staged Changes ,也就是即将要提交的一个文件集。也就是git add 进来的缓存区，我通过
