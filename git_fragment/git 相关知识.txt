@@ -191,7 +191,21 @@ git push origin <本地src分支> : <远程dst分支>，由下面8的概念逻�
 	$ git checkout project-jj alipay-keys
 	比如上面即是把project-jj分支的alipay-keys目录下的文件合并到V2.5.1-SaaS的alipay-keys目录下
 17. beyond compare 和git集成
+a. 配置如下：
+在c/Users/Liao_/.gitconfig里面
+[user]
+	email = liaosijun@evercreative.com.cn
+	name = liaosijun
+[difftool]
+    prompt = false
+[difftool "bc4"]
+	cmd = \"D:/Program Files/Beyond Compare 4/BCompare.exe\" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\" \"$MERGED\"
+	trustExitCode = true
+b. 命令用法：
 	git difftool -t bc4 [文件] 
+	git difftool -t bc4 --dir-diff --no-symlinks 连文件夹也给弄出来
+	同样，如果要把两个commitid的文件比较都用bc展示出来，牛逼的命令就这样诞生了。
+	git difftool -t bc4 1625a74c3f0fd7455d06fc869410257a1c321398 HEAD -d --no-symlinks
 18. stash的应用
 	(1) git stash save "save message" : 执行存储时，添加备注，方便查找，只有git stash 也要可以的，但查找时不方便识别。
 	(2) git stash list ：查看stash了哪些存储。
