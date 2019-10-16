@@ -126,6 +126,13 @@ git push origin <本地src分支> : <远程dst分支>，由下面8的概念逻�
 	2：git reset –-soft：回退到某个版本，只回退了commit的信息，不会恢复到index file一级。如果还要提交，直接commit即可
 
 	3：git reset –-hard：彻底回退到某个版本，本地的源码也会变为上一个版本的内容
+	
+      --mixed               reset HEAD and index
+      --soft                reset only HEAD
+      --hard                reset HEAD, index and working tree
+      --merge               reset HEAD, index and working tree
+      --keep                reset HEAD but keep local changes
+
 12.更改邮箱和用户名
 	我今天查看git log时，发现我的代码提交用户名是liaodaye ,邮箱是liao_2464@163.com,是我个人邮箱和我个人昵称，尴尬。这里讲一下更改邮箱和用户	     名。
 	可以直接用命令改：
