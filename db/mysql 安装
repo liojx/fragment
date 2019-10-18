@@ -1,0 +1,9 @@
+mysql 的安装： 
+  1. 安装mysql 5.7 x64.msi 到本地。
+  2. 安装服务
+     a.  ./mysqld.exe -install 用mysql.exe -install 识别不了。
+     b.  net start mysql 服务无法启动。
+     c.  执行 mysqld --initialize-insecure --user=mysql。
+     d.  在mysql安装目录的bin目录下，mysql -h localhost -u root -p 输入密码。初始默认密码为空。初始密码在D:\program files
+     \MySQL\MySQL Server 5.7\data 的xx.err文件里面。有一句root@localhost is created with an empty password 。所以知道空密码。
+  
