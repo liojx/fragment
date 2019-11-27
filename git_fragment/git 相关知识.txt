@@ -79,13 +79,12 @@
 	删除分支：git branch -d <name>
         删除远程分支：git push origin --delete <name>  （说明：name 不能包含remote/xx/xx了，直接分支名就OK）
         删除本地分支：git branch -D <name> ，这个属于强制删除，但是假如你在当前分支使用这个命令想删除自己分支，是不行的。你需要切换到其他分支来删除当前分支。
-删除远程分支如果遇到这样的错误：error: unable to delete 'remotes/origin/V2.0': remote ref does not exist
-解决方案是首先清除远程分支的本地缓存：git fetch -p origin
-	
+        删除远程分支如果遇到这样的错误：error: unable to delete 'remotes/origin/V2.0': remote ref does not exist
+        解决方案是首先清除远程分支的本地缓存：git fetch -p origin
         关联本地分支和上游分支：git branch --set-upstream-to=origin/V2.5-test V2.5-test
-	
-创建远程分支： 先git checkout -b <name>创建本地分支，这里非常重要的一点是，在哪个当前分支创建的，就表明新分支从哪里来的。第二步是：
-git push origin <本地src分支> : <远程dst分支>，由下面8的概念逻辑可以用：git push origin <本地src分支>
+        
+	创建远程分支： 先git checkout -b <name>创建本地分支，这里非常重要的一点是，在哪个当前分支创建的，就表明新分支从哪里来的。第二步是：
+        git push origin <本地src分支> : <远程dst分支>，由下面8的概念逻辑可以用：git push origin <本地src分支>
 8. 概念逻辑
 	origin:dev
 	这是库origin下的dev分支。
