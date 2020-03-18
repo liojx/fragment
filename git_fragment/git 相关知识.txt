@@ -225,3 +225,14 @@ b. 命令用法：
 	(8) git stash clear ：删除所有缓存的stash
 19. 查看两个版本之间的修改文件列表
  git diff --name-only HEAD~ HEAD
+20. 标签
+	列出所有标签： git tag
+	检索某个标签： git tag -l <标签名>    标签名也可以是模糊匹配，如：git tag -l 5.*
+	切换到某个标签: git checkout <标签名>
+	创建轻量标签： git tag <标签名> -light  轻量标签指向一个发行版的分支，其只是一个像某commit的引用，不存储名称时间戳及标签说明等信息
+	创建带备注的标签: git tag -a <标签名> -m "备注信息"
+	创建指定CommitID的标签: git tag -a <标签名> <CommitID> -m "备注"
+	删除指定标签： git tag -d <标签名>
+	推送所有标签： git push origin --tags
+	推送指定标签： git push origin <标签名>
+	删除远程仓库的标签： git push origin --delete <标签名>
